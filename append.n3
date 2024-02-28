@@ -1,0 +1,57 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix : <http://www.example.org/>.
+@prefix e: <http://eulersharp.sourceforge.net/2003/03swap/log-rules#>.
+
+
+
+
+{?y :is :list2. ?z :is :list3. (?x ?y) list:append ?z }=>{:x1 :out ?x}.
+{?x :is :list1. ?z :is :list3. (?x ?y) list:append ?z }=>{:y1 :out ?y}.
+{?x :is :list1. ?y :is :list2. (?x ?y) list:append ?z }=>{:z1 :out ?z}.
+
+                                                                   
+{?y :is :list2. ?z :is :list3. (?x ?y) :append ?z }=>{:x2 :out ?x}.
+{?x :is :list1. ?z :is :list3. (?x ?y) :append ?z }=>{:y2 :out ?y}.
+{?x :is :list1. ?y :is :list2. (?x ?y) :append ?z }=>{:z2 :out ?z}.
+
+{?y :is :list2. ?z :is :list3. (?x ?y) :append2 ?z }=>{:x3 :out ?x}.
+{?x :is :list1. ?z :is :list3. (?x ?y) :append2 ?z }=>{:y3 :out ?y}.
+{?x :is :list1. ?y :is :list2. (?x ?y) :append2 ?z }=>{:z3 :out ?z}.                                                             
+
+# different approaches for append
+{(() ?x) :append ?x}<={}. 
+{(?y ?x) :append ?z}<={?y list:firstRest (?f  ?rest). ?z list:firstRest (?f ?z2). (?rest ?x) :append ?z2}.
+
+
+
+# This does not work (and I think it should)
+{(() ?x) :append2 ?x}<={}. 
+{(?y ?x) :append2 ?z}<={?y rdf:first ?f; :rest ?rest. ?z rdf:first ?f; rdf:rest ?z2. (?rest ?x) :append2 ?z2}.
+
+#append via forward rules, we make an auxiliary rule for each backward rule
+{?y :is :list2. ?z :is :list3. (?x ?y) :append3 ?z }=>{:x4 :out ?x}.
+{?x :is :list1. ?z :is :list3. (?x ?y) :append3 ?z }=>{:y4 :out ?y}.
+{?x :is :list1. ?y :is :list2. (?x ?y) :append3 ?z }=>{:z4 :out ?z}.
+
+
+
+{?x :is :list1. ?y :is :list2.  }=>{?x  :getAppend ?y}. 
+{?x :is :list1. ?z :is :list3.  }=>{?x  :getAppend2 ?z}. 
+{?y :is :list2. ?z :is :list3.  }=>{?y  :getAppend3 ?z}. 
+
+
+
+# different rule depending on the given and open arguments
+{() :getAppend ?y}=>{(() ?y) :append3 ?y}.
+{ ?x :getAppend ?y. ?x list:firstRest (?a ?b)}=>{ ?b :getAppend ?y}.
+{ ?x :getAppend ?y. ?x list:firstRest (?a ?b). (?b ?y ) :append3 ?z. ?z2 list:firstRest (?a ?z) }=>{(?x ?y) :append3 ?z2 }.
+
+
+{() :getAppend2 ?z}=>{(() ?z) :append3 ?z}.
+{ ?x :getAppend2 ?z. ?x list:firstRest (?a ?b). ?z list:firstRest (?a ?c)}=>{ ?b :getAppend2 ?c}.
+{ ?x :getAppend2 ?z. ?x list:firstRest (?a ?b). ?z list:firstRest (?a ?z1). (?b ?y ) :append3 ?z1. }=>{(?x ?y) :append3 ?z }.
+
+{?z :getAppend3 ?z}=>{(() ?z) :append3 ?z}.
+{ ?y :getAppend3 ?z. ?z list:firstRest (?a ?b). }=>{ ?y :getAppend3 ?b}.
+{ ?y :getAppend3 ?z. ?z list:firstRest (?a ?b). (?x ?y) :append3 ?b. ?x1 list:firstRest (?a ?x) }=>{(?x1 ?y) :append3 ?z }.

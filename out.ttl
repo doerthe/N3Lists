@@ -1,0 +1,17 @@
+# Processed by EYE v9.10.2 (2024-02-27)
+# eye --nope data.n3 append.n3 --query query.n3
+
+@prefix : <http://www.example.org/>.
+
+:x1 :out (:a :b :c).
+:y1 :out (:d :e :f).
+:z1 :out (:a :b :c :d :e :f).
+:x2 :out (:a :b :c).
+:y2 :out (:d :e :f).
+:z2 :out (:a :b :c :d :e :f).
+:x4 :out (:a :b :c).
+:y4 :out (:d :e :f).
+:z4 :out (:a :b :c :d :e :f).
+# 2024-02-28T14:47:34.458Z in=32 out=9 ent=37 step=231 brake=7 inf=118614 sec=0.064 inf/sec=1853344
+# ENDS
+
