@@ -27,7 +27,7 @@
 
 # This does not work (and I think it should)
 {(() ?x) :append2 ?x}<={}. 
-{(?y ?x) :append2 ?z}<={?y rdf:first ?f; :rest ?rest. ?z rdf:first ?f; rdf:rest ?z2. (?rest ?x) :append2 ?z2}.
+{(?y ?x) :append2 ?z}<={?y rdf:first ?f; rdf:rest ?rest. ?z rdf:first ?f; rdf:rest ?z2. (?rest ?x) :append2 ?z2}.
 
 #append via forward rules, we make an auxiliary rule for each backward rule
 {?y :is :list2. ?z :is :list3. (?x ?y) :append3 ?z }=>{:x4 :out ?x}.
